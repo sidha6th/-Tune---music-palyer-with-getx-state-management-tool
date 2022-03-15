@@ -41,6 +41,7 @@ class Searchpage extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       AllSongs songs = controller.searchSongsList[index];
                       return Tile(
+                        isPinned: songs.ispinned??false,
                         playlist: false,
                         index: index,
                         onTap: () {

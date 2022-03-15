@@ -3,6 +3,17 @@ import 'package:tune_in/views/screens/pages/library_page.dart';
 
 //============================== provider class starts from here ==============================//
 class PlayerController extends GetxController {
+//==================icon========================//
+  Icon unpined = const Icon(
+    Icons.push_pin_outlined,
+    color: Colors.white,
+  );
+  Icon pinned = const Icon(
+    Icons.push_pin,
+    color: Colors.red,
+  );
+//===================icon=======================//
+
   //================== pages ====================//
   List pages = [
     const Library(),
@@ -80,6 +91,7 @@ class PlayerController extends GetxController {
 //
 
   RxBool isplayed = false.obs;
+  bool isPinned = false;
   //bool isplaying = false;
   //String? currentplayingsongname;
   //dynamic currentplayingsongimg;
@@ -453,7 +465,82 @@ class PlayerController extends GetxController {
 //============================= end of user playlist song functions=============================//
 
 //==================================pinned song functions===============================//
-  pinTheSong(List<AllSongs> data, BuildContext context) async {
+  unPinTheSongfromLibrary(
+    AllSongs? song,
+    int index,
+  ) async {
+    if (song == null) {
+      return;
+    }
+    Box<AllSongs> allsongbox = await allSongsBox();
+    final tempdata = AllSongs(
+      albums: song.albums,
+      duration: song.duration,
+      image: song.image,
+      ispinned: false,
+      key: song.key,
+      name: song.name,
+      songdata: song.songdata,
+    );
+    await allsongbox.put(song.key!, tempdata);
+    allSongsNotifier[index] = tempdata;
+    if (isPlayingFromPinnedList == true) {
+      if (song.songdata != null) {
+        assetsAudioPlayer.playlist!.add(
+          Audio(song.songdata!),
+        );
+      }
+    }
+    if (currentSongNameNotifier.value == song.name) {
+      isCurrentsongPinned.value = false;
+    }
+    pinnedsongpaths.clear();
+    for (var songpath in pinnedSongNotifier) {
+      pinnedsongpaths.add(
+        songpath.songdata!,
+      );
+    }
+    getThePinnedSongs();
+    update();
+  }
+
+  pinTheSongfromLibrary(
+    AllSongs? song,
+    int index,
+  ) async {
+    if (song == null) {
+      return;
+    }
+    Box<AllSongs> allsongbox = await allSongsBox();
+    final tempdata = AllSongs(
+      albums: song.albums,
+      duration: song.duration,
+      image: song.image,
+      ispinned: true,
+      key: song.key,
+      name: song.name,
+      songdata: song.songdata,
+    );
+    await allsongbox.put(song.key!, tempdata);
+    allSongsNotifier[index] = tempdata;
+    if (isPlayingFromPinnedList == true) {
+      if (song.songdata != null) {
+        assetsAudioPlayer.playlist!.add(
+          Audio(song.songdata!),
+        );
+      }
+    }
+    if (currentSongNameNotifier.value == song.name) {
+      isCurrentsongPinned.value = true;
+    }
+    getThePinnedSongs();
+    update();
+  }
+
+  pinTheSong(
+    List<AllSongs> data,
+    BuildContext context,
+  ) async {
     Box<AllSongs> allsongbox = await allSongsBox();
     for (var item in data) {
       int? key = item.key;

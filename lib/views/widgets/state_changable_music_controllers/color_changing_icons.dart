@@ -1,14 +1,7 @@
 import 'package:tune_in/controller/controller.dart';
 import 'package:tune_in/exports/exports.dart';
 
-const Icon unpined =  Icon(
-  Icons.push_pin_outlined,
-  color: Colors.white,
-);
-const Icon pinned =  Icon(
-  Icons.push_pin,
-  color: Colors.red,
-);
+
 
 class ColorChangeIcon extends StatelessWidget {
   const ColorChangeIcon({
@@ -54,7 +47,7 @@ class ColorChangeIcon extends StatelessWidget {
             );
           }
         },
-        icon: controller.isCurrentsongPinned.value != true ? unpined : pinned,
+        icon: controller.isCurrentsongPinned.value != true ? controller.unpined : controller.pinned,
       );
     });
   }

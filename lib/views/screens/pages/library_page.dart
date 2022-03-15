@@ -227,20 +227,22 @@ class Library extends StatelessWidget {
                                 ],
                               ),
                               child: Tile(
+                                isLibrary: true,
                                 onTap: () {
                                   controller.libraryPageTileClickAction(
                                       song, intex);
                                   Get.to(
                                     NowPlaying(
                                       songImage: song.image,
-                                      songName: song.name!,
+                                      songName: song.name??'Unknown',
                                     ),
                                   );
-                                },
+                                },isPinned: song.ispinned??false,
                                 songImage: song.image,
-                                title: song.name!,
+                                title: song.name??'Unknown',
                                 index: intex,
                                 playlist: false,
+                                song: song,
                               ),
                             ),
                           ),
